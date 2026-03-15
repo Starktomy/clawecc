@@ -1,0 +1,47 @@
+# 依赖
+node_modules/
+
+# 构建产物
+dist/
+
+# 日志
+*.log
+api_doc_mcp.log
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# 构建临时文件
+nul
+release_body.md
+release_body.md.bak
+
+# 内部开发文档（不入公开仓）
+BLOCKING_ISSUES_REPORT.md
+__clawapp-chat-ref.js
+LOBSTER-LEGION-ARCHIVE.md
+
+# 大文件（宣传视频·原始版本）
+docs/promo-video.mp4
+
+# IDE / 编辑器
+.idea/
+*.iml
+.vscode/settings.json
+.vscode/launch.json
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# 开发工具
+.codex/

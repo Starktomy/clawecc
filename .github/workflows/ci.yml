@@ -1,0 +1,46 @@
+# ClawPanel Web 持续集成工作流
+# 在推送到 main 分支或提交 PR 时自动运行
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# 同一分支的新提交会取消正在运行的旧工作流
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: 构建 (${{ matrix.platform }})
+    runs-on: ${{ matrix.platform }}
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+
+    steps:
+      # 签出代码
+      - name: 签出代码
+        uses: actions/checkout@v4
+
+      # 安装 Node.js 22
+      - name: 安装 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # 安装前端依赖
+      - name: 安装依赖
+        run: npm ci
+
+      # 前端构建验证
+      - name: 构建
+        run: npm run build

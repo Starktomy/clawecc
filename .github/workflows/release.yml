@@ -1,0 +1,86 @@
+# ClawPanel Web 发布工作流
+# 推送 v* 标签时自动构建并创建 GitHub Release
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: '发布版本号 (例如: v1.0.0)'
+        required: true
+        type: string
+        default: 'v1.0.0'
+
+jobs:
+  build:
+    name: 构建 Web 版本
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 签出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 设置版本标签
+        id: vars
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "TAG_NAME=${{ github.event.inputs.tag_name }}" >> "$GITHUB_ENV"
+          else
+            echo "TAG_NAME=${{ github.ref_name }}" >> "$GITHUB_ENV"
+          fi
+
+      - name: 安装 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 构建 Web 版本
+        run: npm run build
+
+      - name: 上传构建产物
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist
+          asset_name: clawpanel-web-${{ env.TAG_NAME }}.zip
+          asset_content_type: application/zip
+
+      - name: 创建 GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.TAG_NAME }}
+          release_name: ClawPanel Web ${{ env.TAG_NAME }}
+          body: |
+            ## 下载
+
+            下载 `clawpanel-web-${{ env.TAG_NAME }}.zip` 并解压后运行：
+
+            ```bash
+            cd dist
+            npm run serve
+            ```
+
+            或者使用 Docker：
+
+            ```bash
+            docker run -p 1420:1420 -v ~/.openclaw:/root/.openclaw nginx:alpine
+            # 将 dist 内容复制到 nginx html 目录
+            ```
+          draft: false
+          prerelease: false

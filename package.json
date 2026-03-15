@@ -1,0 +1,35 @@
+{
+  "name": "clawpanel-web",
+  "version": "0.9.1",
+  "private": true,
+  "description": "ClawPanel Web - OpenClaw 可视化管理面板，纯 Web 版本",
+  "type": "module",
+  "author": "qingchencloud",
+  "license": "MIT",
+  "homepage": "https://github.com/qingchencloud/clawpanel",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qingchencloud/clawpanel.git"
+  },
+  "bugs": {
+    "url": "https://github.com/qingchencloud/clawpanel/issues"
+  },
+  "keywords": [
+    "openclaw",
+    "ai-agent",
+    "web",
+    "management-panel"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "node scripts/serve.js",
+    "version:sync": "node scripts/sync-version.js",
+    "version:set": "node scripts/sync-version.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "vite": "^6.3.5"
+  }
+}
