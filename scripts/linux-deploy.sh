@@ -8,7 +8,7 @@ echo "=========================================="
 echo ""
 
 PANEL_PORT=1420
-REPO_URL="https://github.com/qingchencloud/clawpanel.git"
+REPO_URL="https://github.com/Starktomy/clawecc.git"
 REPO_URL_GITEE="https://gitee.com/QtCodeCreators/clawpanel.git"
 NPM_REGISTRY="https://registry.npmmirror.com"
 
